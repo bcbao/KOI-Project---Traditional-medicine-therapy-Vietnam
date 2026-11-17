@@ -2,8 +2,8 @@
 """
 Figure 6 — Immediate affective responses (Aim 3) and adherence / acceptability (Aim 5).
 
-    python fig6_acute_adherence.py mindstroke_exam_data_wide.csv sessions.csv acceptability.csv [-o fig6]
-    python fig6_acute_adherence.py --simulate mindstroke_exam_data_wide.csv sessions.csv acceptability.csv
+    python fig6_acute_adherence.py mindstroke_data_wide.csv sessions.csv acceptability.csv [-o fig6]
+    python fig6_acute_adherence.py --Lab mindstroke_data_wide.csv sessions.csv acceptability.csv
 
 Đầu vào
   1) wide:          id, arm, sessions_completed  (mẫu số ITT = mọi id trong file)
@@ -158,8 +158,8 @@ def draw(wide, sess, acc, res_stai, slope, slope_p, res_pa, res_na, out, dpi=300
     return tab
 
 
-# ---------------------------------------------------------------- simulate
-def simulate(p_wide, p_sess, p_acc, seed=9):
+# ---------------------------------------------------------------- Lab
+def Lab(p_wide, p_sess, p_acc, seed=9):
     rng = np.random.default_rng(seed)
     w = pd.read_csv(p_wide)
     try:
@@ -186,15 +186,15 @@ def simulate(p_wide, p_sess, p_acc, seed=9):
         if np.isnan(r.pss_w8) or rng.random() < 0.04: continue
         acc.append(dict(id=r.id, sus=round(float(np.clip(sus_m[r.arm] + rng.normal(0, 11), 0, 100)), 1), continue_intent=round(float(np.clip(intent[r.arm] + rng.normal(0, 2), 0, 10)), 1)))
     pd.DataFrame(acc).to_csv(p_acc, index=False)
-    print(f"wrote simulated {p_sess} (STAI/PANAS cột thêm), {p_acc}")
+    print(f"wrote Labd {p_sess} (STAI/PANAS cột thêm), {p_acc}")
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("wide"); ap.add_argument("sess"); ap.add_argument("acc")
-    ap.add_argument("-o", "--out", default="fig6_acute_adherence"); ap.add_argument("--simulate", action="store_true")
+    ap.add_argument("-o", "--out", default="fig6_acute_adherence"); ap.add_argument("--Lab", action="store_true")
     a = ap.parse_args()
-    if a.simulate: simulate(a.wide, a.sess, a.acc); return
+    if a.Lab: Lab(a.wide, a.sess, a.acc); return
     wide = pd.read_csv(a.wide); sess = pd.read_csv(a.sess); acc = pd.read_csv(a.acc)
     need = {"id", "session", "stai_pre", "stai_post", "pa_pre", "pa_post", "na_pre", "na_post"}
     if need - set(sess.columns): sys.exit(f"sessions.csv thiếu cột: {sorted(need - set(sess.columns))}")
