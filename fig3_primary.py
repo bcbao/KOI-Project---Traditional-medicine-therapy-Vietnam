@@ -4,7 +4,7 @@ Figure 3 — Primary outcome (PSS-10) from a long-format CSV.
 
     python fig3_primary.py data_pss.csv                -> fig3_primary.svg/.png/.pdf + fig3_primary_stats.csv
     python fig3_primary.py data_pss.csv -o fig3
-    python fig3_primary.py --simulate data_pss.csv     -> tạo file CSV giả lập để thử
+    python fig3_primary.py data_pss.csv    
 
 CSV yêu cầu (một dòng = một người × một mốc):
     id, arm, week, pss [, sex, site]
