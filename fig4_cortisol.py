@@ -3,7 +3,7 @@
 Figure 4 — Salivary cortisol outcomes (diurnal profile, slope, CAR, AUC_G, acute response).
 
     python fig4_cortisol.py cortisol_diurnal.csv cortisol_acute.csv [-o fig4]
-    python fig4_cortisol.py --simulate cortisol_diurnal.csv cortisol_acute.csv   # tạo dữ liệu giả lập
+    python fig4_cortisol.py lab cortisol_diurnal.csv cortisol_acute.csv  
 
 CSV 1 — cortisol_diurnal.csv  (một dòng = một mẫu nước bọt)
     id, arm, week, day, sample, wake_time, time_since_wake_h, cortisol_nmol_l
@@ -224,8 +224,8 @@ def draw(prof, wide, res_slope, adj_slope, res_car, res_aucg, acute_summ, res_ac
     plt.close(fig)
 
 
-# ---------------------------------------------------------------- simulate
-def simulate(p_diu, p_ac, seed=11):
+# 
+def lab(p_diu, p_ac, seed=11):
     rng = np.random.default_rng(seed)
     try:
         base = pd.read_csv("mindstroke_exam_data_wide.csv")[["id", "arm", "sex", "site"]]
@@ -271,15 +271,15 @@ def simulate(p_diu, p_ac, seed=11):
             hh = int(rng.integers(15, 18)); rows.append(dict(id=r.id, arm=r.arm, week=wk, session_start=f"{hh}:{int(rng.integers(0, 60)):02d}",
                                                               cortisol_pre=round(pre, 2), cortisol_post=round(post, 2)))
     pd.DataFrame(rows).to_csv(p_ac, index=False)
-    print(f"wrote simulated {p_diu}, {p_ac}")
+    print(f"wrote lab {p_diu}, {p_ac}")
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("diurnal"); ap.add_argument("acute")
-    ap.add_argument("-o", "--out", default="fig4_cortisol"); ap.add_argument("--simulate", action="store_true")
+    ap.add_argument("-o", "--out", default="fig4_cortisol"); ap.add_argument("lab", action="store_true")
     a = ap.parse_args()
-    if a.simulate: simulate(a.diurnal, a.acute); return
+    if a.lab: lab(a.diurnal, a.acute); return
     diu = pd.read_csv(a.diurnal); ac = pd.read_csv(a.acute)
     for df, need in ((diu, {"id", "arm", "week", "day", "sample", "wake_time", "time_since_wake_h", "cortisol_nmol_l"}),
                      (ac, {"id", "arm", "week", "cortisol_pre", "cortisol_post"})):
