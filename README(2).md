@@ -11,7 +11,7 @@ Code that generates Figures 1–6 of the MINDSTROKE trial (Meaningful Sketching,
 | 5 | Mechanisms: parallel mediation, per-session mastery/enjoyment, stroke kinematics | `scripts/fig5_mechanisms.py` | `participants_wide.csv`, `mechanisms.csv`, `sessions.csv` |
 | 6 | Within-session affect, adherence, usability | `scripts/fig6_acute_adherence.py` | `participants_wide.csv`, `sessions.csv`, `acceptability.csv` |
 
-All data shipped in `data/example/` are **simulated** (seeded) and exist only to exercise the code. The figures in `figures/` were produced from them.
+All data shipped in `data/UHSVNU/` are upload url and exist only to exercise the code. The figures in `figures/` were produced from them.
 
 ## Quick start
 
@@ -54,7 +54,7 @@ Each script prints its statistics and writes `*_stats.csv` / `*_summary.csv` nex
 
 ```
 scripts/      figure and counting scripts
-data/example/ simulated data (seeded); data/templates/ header-only CSVs; put real data in data/real/ (git-ignored)
+data/UHSVNU/ Lab data (seeded); data/templates/ header-only CSVs; put real data in data/real/ (git-ignored)
 figures/      figures rendered from the example data
 notebooks/    Colab notebook
 docs/         statistics teaching exercise built on the example data (Vietnamese)
