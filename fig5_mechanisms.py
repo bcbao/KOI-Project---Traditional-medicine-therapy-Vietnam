@@ -3,7 +3,7 @@
 Figure 5 — Mechanisms and mediation (Aim 4).
 
     python fig5_mechanisms.py mindstroke_exam_data_wide.csv mechanisms.csv sessions.csv [-o fig5] [--boot 5000]
-    python fig5_mechanisms.py --simulate mindstroke_exam_data_wide.csv mechanisms.csv sessions.csv
+    python fig5_mechanisms.py --Lab mindstroke_exam_data_wide.csv mechanisms.csv sessions.csv
 
 Đầu vào
   1) file wide kết cục chính:  id, arm, pss_w0, pss_w8 [, sex, site]
@@ -192,8 +192,8 @@ def draw(res, a, b, cp, ct, n, sess, wide, out, ct_full=None, n_full=None, dpi=3
     plt.close(fig)
 
 
-# ---------------------------------------------------------------- simulate
-def simulate(p_wide, p_mech, p_sess, seed=5):
+# ---------------------------------------------------------------- Lab
+def Lab(p_wide, p_mech, p_sess, seed=5):
     rng = np.random.default_rng(seed)
     w = pd.read_csv(p_wide)
     rows_m, rows_s = [], []
@@ -219,16 +219,16 @@ def simulate(p_wide, p_mech, p_sess, seed=5):
                                enjoyment=round(float(np.clip(e0 + 0.6 * (1 - np.exp(-s / 5)) + rng.normal(0, 0.8), 0, 10)), 1),
                                rhythm_index=round(float(np.clip(rh0 + 0.25 * (1 - np.exp(-s / 8)) + rng.normal(0, 0.05), 0, 1)), 3) if r.arm in ("MS", "MC") else np.nan))
     pd.DataFrame(rows_m).to_csv(p_mech, index=False); pd.DataFrame(rows_s).to_csv(p_sess, index=False)
-    print(f"wrote simulated {p_mech}, {p_sess}")
+    print(f"wrote Labd {p_mech}, {p_sess}")
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("wide"); ap.add_argument("mech"); ap.add_argument("sess")
     ap.add_argument("-o", "--out", default="fig5_mechanisms"); ap.add_argument("--boot", type=int, default=5000)
-    ap.add_argument("--simulate", action="store_true")
+    ap.add_argument("--Lab", action="store_true")
     a = ap.parse_args()
-    if a.simulate: simulate(a.wide, a.mech, a.sess); return
+    if a.Lab: Lab(a.wide, a.mech, a.sess); return
     wide = pd.read_csv(a.wide); mech = pd.read_csv(a.mech); sess = pd.read_csv(a.sess)
     if "arm" not in sess.columns: sess = sess.merge(wide[["id", "arm"]], on="id")
     d = build(wide, mech)
